@@ -18,6 +18,6 @@
     - name: "Disable Instance {{ item.hostname }}"
       ansible.controller.instance:
         hostname: "{{ item.hostname }}"
-        enabled: true
+        enabled: false
         validate_certs: false
 
