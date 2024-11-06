@@ -1,0 +1,38 @@
+---
+- hosts: localhost
+  gather_facts: false
+  vars:
+    filter: control
+  tasks:
+
+    - name: Get nodes
+      ansible.builtin.uri:
+        url: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/v2/instances/?node_type={{ filter }}"
+        user: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
+        password: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
+        method: GET
+        force_basic_auth: true
+        status_code: 200
+        body_format: json
+        validate_certs: false
+      register: instances
+
+    - name: Disable Instances
+      ansible.controller.instance:
+        hostname: "{{ item.hostname }}"
+        enabled: false
+        validate_certs: false
+      loop: "{{ instances.json.results }}"
+
+    - name: Update Project
+      ansible.builtin.include_tasks: project_sync.yml
+      loop: "{{ instances.json.results }}"
+
+    - name: Enable Instances
+      ansible.controller.instance:
+        hostname: "{{ item.hostname }}"
+        enabled: true
+        validate_certs: false
+      loop: "{{ instances.json.results }}"
+
+

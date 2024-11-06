@@ -1,0 +1,18 @@
+    - name: "Enable Instance {{ item.hostname }}"
+      ansible.controller.instance:
+        hostname: "{{ item.hostname }}"
+        enabled: true
+        validate_certs: false
+
+    - name: "Update Project in node {{ item.hostname }}" 
+      ansible.controller.project_update:
+        project: "{{ project_name }}"
+        wait: true
+        validate_certs: false
+
+    - name: "Disable Instance {{ item.hostname }}"
+      ansible.controller.instance:
+        hostname: "{{ item.hostname }}"
+        enabled: true
+        validate_certs: false
+
