@@ -4,6 +4,11 @@
         enabled: true
         validate_certs: false
 
+    - name: Sleep for 5 seconds and continue with play
+      ansible.builtin.wait_for:
+        timeout: 5
+      delegate_to: localhost
+
     - name: "Update Project in node {{ item.hostname }}" 
       ansible.controller.project_update:
         project: "{{ project_name }}"
