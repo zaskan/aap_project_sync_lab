@@ -1,8 +1,3 @@
-    - name: Sleep for 5 seconds and continue with play
-      ansible.builtin.wait_for:
-        timeout: 5
-      delegate_to: localhost
-      
     - name: "Enable Instance {{ item.hostname }}"
       ansible.controller.instance:
         hostname: "{{ item.hostname }}"
